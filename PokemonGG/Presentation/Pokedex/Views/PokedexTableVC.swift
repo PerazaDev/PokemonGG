@@ -36,6 +36,7 @@ extension PokedexTableVC: UITableViewDataSource{
 }
 extension PokedexTableVC: UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         delegateActions?.selectRow(id: array[indexPath.row].pokemon_species.id)
         
     }

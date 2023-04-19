@@ -8,7 +8,7 @@
 import Foundation
 
 enum PokemonAPIRouter: APIConfiguration{
-    case pokemonDetail
+    case pokemonEvolutions(id: Int)
     case pokemonImg(id: Int)
     case pokemonSpecies(id: Int)
     
@@ -21,8 +21,8 @@ enum PokemonAPIRouter: APIConfiguration{
     
     var path: String{
         switch self {
-        case .pokemonDetail:
-            return ""
+        case .pokemonEvolutions(let id):
+            return "https://pokeapi.co/api/v2/evolution-chain/\(id)"
         case .pokemonImg(let id):
             return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(id).png"
         case .pokemonSpecies(let id):

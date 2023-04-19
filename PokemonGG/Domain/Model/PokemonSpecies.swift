@@ -9,11 +9,17 @@ import UIKit
 
 struct SpeciesAPIModel: Codable{
     var color: Color
-    
+    var name: String
+    var evolution_chain: EvolutionChain
     struct Color: Codable {
         var name: Colors
     }
-    
+    struct EvolutionChain: Codable{
+        var url: String
+        var id: Int{
+            return url.idURL
+        }
+    }
 }
 
 enum Colors:String, Codable{

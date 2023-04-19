@@ -45,10 +45,15 @@ class PokemonVC: UIViewController {
         return containerView
     }()
     
-    lazy var v1: UIView = {
+    lazy var containerImage: UIView = {
        let containerView = UIView()
-        containerView.backgroundColor = .greenColor
+        containerView.backgroundColor = .blueColor
+        containerView.addSubview(img)
         return containerView
+    }()
+    lazy var img: UIImageView = {
+        let view = UIImageView(frame: .zero)
+        return view
     }()
     lazy var v2: UIView = {
        let containerView = UIView()
@@ -67,14 +72,17 @@ class PokemonVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         scrollview.setColorPokemon(id: id)
+        img.setImgPokemon(id: id)
+        
     }
     private func configureContrains(){
         scrollview.translatesAutoresizingMaskIntoConstraints = false
         containerVstack.translatesAutoresizingMaskIntoConstraints = false
         subcontainerVstack.translatesAutoresizingMaskIntoConstraints = false
-        v1.translatesAutoresizingMaskIntoConstraints = false
+        containerImage.translatesAutoresizingMaskIntoConstraints = false
         v2.translatesAutoresizingMaskIntoConstraints = false
         containerView.translatesAutoresizingMaskIntoConstraints = false
+        img.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             scrollview.widthAnchor.constraint(equalTo: view.widthAnchor),
             scrollview.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -83,16 +91,24 @@ class PokemonVC: UIViewController {
             containerVstack.widthAnchor.constraint(equalTo: scrollview.widthAnchor, multiplier: 1),
             containerVstack.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor),
             containerVstack.topAnchor.constraint(equalTo: scrollview.topAnchor),
-            v1.heightAnchor.constraint(equalToConstant: 200),
+            containerImage.heightAnchor.constraint(equalToConstant: 300),
             v2.heightAnchor.constraint(equalToConstant: 1000),
-            containerVstack.bottomAnchor.constraint(equalTo: scrollview.bottomAnchor)/*,
+            containerVstack.bottomAnchor.constraint(equalTo: scrollview.bottomAnchor),
+            img.widthAnchor.constraint(equalToConstant: 100),
+            img.heightAnchor.constraint(equalToConstant: 100),
+            img.leadingAnchor.constraint(equalTo: containerImage.leadingAnchor, constant: 0),
+            img.trailingAnchor.constraint(equalTo: containerImage.trailingAnchor, constant: 0),
+            img.bottomAnchor.constraint(equalTo: containerImage.bottomAnchor, constant: 0),
+            img.topAnchor.constraint(equalTo: containerImage.topAnchor, constant: 0)
+            
+            /*,
             subcontainerVstack.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 1),
             subcontainerVstack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
             subcontainerVstack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 20),
             subcontainerVstack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
             subcontainerVstack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 20)*/
         ])
-        containerVstack.addArrangedSubview(v1)
+        containerVstack.addArrangedSubview(containerImage)
         containerVstack.addArrangedSubview(v2)
         
     }

@@ -12,6 +12,7 @@ class PokedexViewModel{
     @Published var pokedexes: [PokedexesAPIModel.Result] = []
     @Published var pokedex: PokedexAPIModel = .init(name: "", pokemon_entries: [])
     @Published var error: Bool = false
+    
     func getPokedex(id: Int) async{
         do{
             pokedex = try await useCase.getPokedex(id: id)
