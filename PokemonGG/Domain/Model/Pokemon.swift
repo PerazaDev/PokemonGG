@@ -15,4 +15,5 @@ struct Pokemon{
         var id: Int
         var minLevel: Int
     }
+    static let empty: Self = .init(name: "N/A", evolutions: [])
 }

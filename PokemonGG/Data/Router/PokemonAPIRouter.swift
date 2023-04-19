@@ -42,7 +42,9 @@ enum PokemonAPIRouter: APIConfiguration{
         
         var urlRequest = URLRequest(url: URL(string: path)!)
         urlRequest.httpMethod = method.rawValue
-        urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: parameters!,options: .prettyPrinted)
+        if let parameters = parameters{
+            urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: parameters,options: .prettyPrinted)
+        }
         return urlRequest
     }
     

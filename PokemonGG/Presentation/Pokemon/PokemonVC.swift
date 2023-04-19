@@ -8,8 +8,9 @@
 import UIKit
 
 class PokemonVC: UIViewController {
-    
+    private let viewModel = PokemonViewModel()
     private var id: Int = 0
+    
     lazy var label: UILabel = {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 20))
         label.text = "aloja \(id)"
@@ -73,7 +74,14 @@ class PokemonVC: UIViewController {
         super.viewWillAppear(animated)
         scrollview.setColorPokemon(id: id)
         img.setImgPokemon(id: id)
+        Task{
+            await viewModel.getInfo(id: id)
+        }
         
+    }
+    convenience init(id: Int) {
+        self.init()
+        self.id = id
     }
     private func configureContrains(){
         scrollview.translatesAutoresizingMaskIntoConstraints = false
@@ -113,8 +121,4 @@ class PokemonVC: UIViewController {
         
     }
     
-    convenience init(id: Int) {
-        self.init()
-        self.id = id
-    }
 }
