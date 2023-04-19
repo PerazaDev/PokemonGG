@@ -6,16 +6,32 @@
 //
 
 import UIKit
+import Combine
 
 class PokemonVC: UIViewController {
     private let viewModel = PokemonViewModel()
     private var id: Int = 0
-    
+    private var anycancelable:[AnyCancellable] = []
     lazy var label: UILabel = {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 20))
         label.text = "aloja \(id)"
         view.addSubview(label)
         return label
+    }()
+    lazy var evolutions: PokemonCollectionVC = {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 50, height: 50)
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
+        layout.scrollDirection = .horizontal
+        layout.estimatedItemSize = .init(width: 260, height: 160)
+        let collection = PokemonCollectionVC(frame: CGRect(x: 0, y: 0, width: Utils.screenWidth, height: 200), collectionViewLayout: layout)
+        collection.register(PokemonCollectionViewCell.self, forCellWithReuseIdentifier: "PokemonCollectionViewCell")
+        collection.backgroundColor = .blue
+        collection.dataSource =  collection
+        collection.delegate = collection
+        v2.addSubview(collection)
+        return collection
     }()
     lazy var scrollview: UIScrollView = {
         let scrollview = UIScrollView()
@@ -66,6 +82,7 @@ class PokemonVC: UIViewController {
         super.viewDidLoad()
         view.addSubview(scrollview)
         configureContrains()
+        configureBindings()
         //label.center = view.center
         
         // Do any additional setup after loading the view.
@@ -83,6 +100,7 @@ class PokemonVC: UIViewController {
         self.init()
         self.id = id
     }
+    
     private func configureContrains(){
         scrollview.translatesAutoresizingMaskIntoConstraints = false
         containerVstack.translatesAutoresizingMaskIntoConstraints = false
@@ -107,8 +125,9 @@ class PokemonVC: UIViewController {
             img.leadingAnchor.constraint(equalTo: containerImage.leadingAnchor, constant: 0),
             img.trailingAnchor.constraint(equalTo: containerImage.trailingAnchor, constant: 0),
             img.bottomAnchor.constraint(equalTo: containerImage.bottomAnchor, constant: 0),
-            img.topAnchor.constraint(equalTo: containerImage.topAnchor, constant: 0)
-            
+            img.topAnchor.constraint(equalTo: containerImage.topAnchor, constant: 0),
+            evolutions.centerXAnchor.constraint(equalTo: v2.centerXAnchor),
+            evolutions.topAnchor.constraint(equalTo: v2.topAnchor, constant: 10)
             /*,
             subcontainerVstack.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 1),
             subcontainerVstack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
@@ -119,6 +138,27 @@ class PokemonVC: UIViewController {
         containerVstack.addArrangedSubview(containerImage)
         containerVstack.addArrangedSubview(v2)
         
+    }
+    func configureBindings(){
+        viewModel.$error.sink { error in
+            if error{
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Aviso", message: "Ocurrio un error", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Aceptar", style: .default))
+                    self.present(alert, animated: true)
+                }
+            }
+        }
+        .store(in: &anycancelable)
+        viewModel.$model.sink {[weak self] pokemon in
+            guard let self = self else{return}
+            evolutions.array = pokemon.evolutions
+            
+            DispatchQueue.main.async {
+                self.title = pokemon.name
+            }
+            
+        }.store(in: &anycancelable)
     }
     
 }

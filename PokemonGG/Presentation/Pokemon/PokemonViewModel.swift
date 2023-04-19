@@ -17,9 +17,18 @@ class PokemonViewModel{
         do{
             let species = try await useCase.getSpecies(id: id)
             let evolution = try await useCase.getEvolutions(id: species.evolution_chain.id)
-            
+            let evolutionsMapped = mapper(evolutions: evolution)
+            model = .init(name: species.name, evolutions: evolutionsMapped)
         }catch{
             self.error = true
         }
+    }
+    
+    private func mapper(evolutions: PokemonEvolutionAPIModel) ->[Pokemon.Evolution]{
+        var model : [Pokemon.Evolution] = []
+        for index in 1...30 {
+            model.append(Pokemon.Evolution(name: "aloja \(index)", id: 0, minLevel: 0))
+        }
+        return model
     }
 }
