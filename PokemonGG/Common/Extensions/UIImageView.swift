@@ -21,8 +21,8 @@ extension UIImageView{
                 
             }
         }
-        
     }
+    
     func setImgPokemon(id: Int){
         self.showLoading()
         guard let url = URL(string: PokemonAPIRouter.pokemonImg(id: id).path) else { return }
@@ -34,16 +34,6 @@ extension UIImageView{
                 }
             }
             
-        }.resume()
-    }
-    func setColorPokemon(id: Int){
-        guard let url = URL(string: PokemonAPIRouter.pokemonSpecies(id: id).path) else { return }
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            if let dataSpecie = data, let model = try? JSONDecoder().decode(SpeciesAPIModel.self, from: dataSpecie){
-                DispatchQueue.main.async { [self] in
-                    self.backgroundColor = model.color.name.color
-                }
-            }
         }.resume()
     }
 }

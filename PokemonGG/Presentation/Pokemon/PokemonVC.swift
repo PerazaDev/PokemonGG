@@ -18,7 +18,6 @@ class PokemonVC: UIViewController {
     }()
     lazy var scrollview: UIScrollView = {
         let scrollview = UIScrollView()
-        scrollview.backgroundColor = .whiteColor
         scrollview.addSubview(containerVstack)
         return scrollview
     }()
@@ -65,7 +64,10 @@ class PokemonVC: UIViewController {
         
         // Do any additional setup after loading the view.
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        scrollview.setColorPokemon(id: id)
+    }
     private func configureContrains(){
         scrollview.translatesAutoresizingMaskIntoConstraints = false
         containerVstack.translatesAutoresizingMaskIntoConstraints = false
