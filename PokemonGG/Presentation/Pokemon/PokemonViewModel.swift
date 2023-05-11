@@ -25,10 +25,19 @@ class PokemonViewModel{
     }
     
     private func mapper(evolutions: PokemonEvolutionAPIModel) ->[Pokemon.Evolution]{
+        
         var model : [Pokemon.Evolution] = []
-        for index in 1...30 {
-            model.append(Pokemon.Evolution(name: "aloja \(index)", id: 0, minLevel: 0))
-        }
+        model.append(Pokemon.Evolution(name: evolutions.chain?.species?.name ?? "",
+                                       id: evolutions.chain?.species?.id ?? 0,
+                                       minLevel: evolutions.chain?.evolution_details?.first?.min_level ?? 0))
+        let all = mapChain(chain: evolutions.chain?.evolves_to ?? [])
+        model.append(contentsOf: all.map({Pokemon.Evolution(name: $0.species?.name ?? "",
+                                                            id: $0.species?.id ?? 0,
+                                                            minLevel: $0.evolution_details?.first?.min_level ?? 0)}))
         return model
+    }
+    private func mapChain(chain:  [PokemonEvolutionAPIModel.Chain]) -> [PokemonEvolutionAPIModel.Chain]{
+        return chain + chain.compactMap { $0.evolves_to}.flatMap(mapChain)
+
     }
 }

@@ -24,7 +24,7 @@ class PokemonVC: UIViewController {
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
         layout.scrollDirection = .horizontal
-        layout.estimatedItemSize = .init(width: 260, height: 160)
+        layout.estimatedItemSize = .init(width: 200, height: 160)
         let collection = PokemonCollectionVC(frame: CGRect(x: 0, y: 0, width: Utils.screenWidth, height: 200), collectionViewLayout: layout)
         collection.register(PokemonCollectionViewCell.self, forCellWithReuseIdentifier: "PokemonCollectionViewCell")
         collection.backgroundColor = .blue
@@ -70,6 +70,7 @@ class PokemonVC: UIViewController {
     }()
     lazy var img: UIImageView = {
         let view = UIImageView(frame: .zero)
+        view.contentMode = .scaleAspectFit
         return view
     }()
     lazy var v2: UIView = {

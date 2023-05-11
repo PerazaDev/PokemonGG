@@ -8,18 +8,37 @@
 import UIKit
 
 class PokemonCollectionViewCell: UICollectionViewCell {
-
-    let titleLabel = UILabel()
-
+    lazy var stack: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.alignment =   .center
+        view.addArrangedSubview(titleLabel)
+        view.addArrangedSubview(img)
+        return view
+    }()
+    lazy var titleLabel: UILabel = {
+        let view = UILabel()
+        view.numberOfLines = 0
+        return view
+    }()
+    lazy var img: UIImageView = {
+        let view = UIImageView()
+        view.scalesLargeContentImage = true
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(titleLabel)
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        img.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(stack)
 
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            stack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            stack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            img.widthAnchor.constraint(equalToConstant: 150),
+            img.heightAnchor.constraint(equalToConstant: 150)
         ])
     }
 
@@ -28,6 +47,7 @@ class PokemonCollectionViewCell: UICollectionViewCell {
     }
     func configure(evolution:Pokemon.Evolution){
         titleLabel.text = evolution.name
+        img.setImgPokemon(id: evolution.id)
     }
 
 }
